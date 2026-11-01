@@ -1,0 +1,239 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Boarding Pass Tracker",
+        "description": "Boarding Pass Tracker legge le carte d'imbarco, segue i voli e ti avvisa. Foto, carte d'imbarco e nomi restano in Home Assistant. Escono solo: il codice del volo verso AviationStack e Flightradar24 (tramite la sua integrazione), la posizione del gate cercata su OpenStreetMap, e il testo delle notifiche, che passa dal servizio push dell'app Home Assistant (Apple/Google). Le foto vanno solo al decodificatore che indichi."
+      },
+      "adopt": {
+        "title": "Dati trovati",
+        "description": "Ho trovato i dati di un'installazione precedente: {flights} voli, {documents} documenti, {files} file, {passes} carte d'imbarco (schema v{schema}); {queued} in coda, {unnotified} da notificare. Li uso? I dati restano dove sono; se serve aggiornarli, prima ne faccio una copia in backups/."
+      },
+      "person_found": {
+        "title": "Persona «{name}»",
+        "description": "Persona «{name}» trovata nei dati: scegli il suo utente di Home Assistant (per le Scorciatoie), il telefono per le notifiche e la persona per il promemoria del gate.",
+        "data": {
+          "ha_user": "Utente di Home Assistant",
+          "notify": "Telefono per le notifiche",
+          "person": "Persona",
+          "skip": "Nessuna notifica per questo nome"
+        },
+        "data_description": {
+          "ha_user": "Il token di questo utente identifica la persona nelle Scorciatoie. Senza, la persona non può usarle.",
+          "notify": "Il servizio notify.mobile_app_… dell'app Home Assistant sul suo telefono.",
+          "person": "La sua posizione serve per il promemoria «Vai al gate».",
+          "skip": "Nessuna persona per questo nome: i suoi voli e documenti restano, ma non riceve notifiche."
+        }
+      },
+      "person_config": {
+        "title": "Persona «{name}»",
+        "description": "Persona «{name}» della configurazione del vecchio servizio, ancora senza dati: riceve gli avvisi sui cambi dei voli. Scegli il suo utente di Home Assistant (per le Scorciatoie), il telefono per le notifiche e la persona per il promemoria del gate.",
+        "data": {
+          "name": "Nome",
+          "ha_user": "Utente di Home Assistant",
+          "notify": "Telefono per le notifiche",
+          "person": "Persona"
+        },
+        "data_description": {
+          "name": "Il nome con cui compare nei dati: solo lettere minuscole.",
+          "ha_user": "Il token di questo utente identifica la persona nelle Scorciatoie. Senza, la persona non può usarle.",
+          "notify": "Il servizio notify.mobile_app_… dell'app Home Assistant sul suo telefono.",
+          "person": "La sua posizione serve per il promemoria «Vai al gate»."
+        }
+      },
+      "people": {
+        "title": "Persone",
+        "description": "Scegli gli utenti di Home Assistant da aggiungere come persone (anche nessuno): per ognuno sceglierai il nome, il telefono per le notifiche e la persona. Altre persone si aggiungono anche dopo, con «Aggiungi persona».",
+        "data": {
+          "users": "Utenti di Home Assistant"
+        }
+      },
+      "person": {
+        "title": "Persona per {user}",
+        "description": "Utente «{user}» di Home Assistant: scegli il nome con cui compare nei dati, il telefono per le notifiche e la persona per il promemoria del gate.",
+        "data": {
+          "name": "Nome",
+          "notify": "Telefono per le notifiche",
+          "person": "Persona"
+        },
+        "data_description": {
+          "name": "Il nome con cui compare nei dati: solo lettere minuscole.",
+          "notify": "Il servizio notify.mobile_app_… dell'app Home Assistant sul suo telefono.",
+          "person": "La sua posizione serve per il promemoria «Vai al gate»."
+        }
+      },
+      "services": {
+        "title": "Servizi",
+        "description": "Tutto facoltativo. Il decodificatore serve per leggere foto (anche HEIC) e PDF: senza, funzionano i pass del Wallet e i voli aggiunti a mano. La chiave di AviationStack non viene provata, perché una prova userebbe una delle chiamate del mese.",
+        "data": {
+          "aviationstack_key": "Chiave di AviationStack",
+          "monthly_cap": "Chiamate ad AviationStack al mese",
+          "decoder_url": "Indirizzo del decodificatore",
+          "fr24_add": "Flightradar24: aggiungi volo",
+          "fr24_remove": "Flightradar24: togli volo",
+          "fr24_tracked": "Flightradar24: voli seguiti"
+        },
+        "data_description": {
+          "aviationstack_key": "Per orari, ritardi e gate dei voli. Senza chiave i voli restano quelli delle carte d'imbarco.",
+          "monthly_cap": "Il piano gratuito ne ha 100: 0 vuol dire nessuna chiamata.",
+          "decoder_url": "L'app Barcode Decoder o il suo container, per esempio http://host:8099. Vuoto: nessun decodificatore.",
+          "fr24_add": "L'entità testo dell'integrazione Flightradar24 che aggiunge un volo da seguire.",
+          "fr24_remove": "L'entità testo dell'integrazione Flightradar24 che toglie un volo seguito.",
+          "fr24_tracked": "Il sensore dell'integrazione Flightradar24 con i voli seguiti."
+        }
+      },
+      "reconfigure": {
+        "title": "Chiave di AviationStack",
+        "description": "Incolla la nuova chiave di AviationStack, oppure lascia vuoto per non usarla.",
+        "data": {
+          "aviationstack_key": "Chiave di AviationStack"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Chiave di AviationStack rifiutata",
+        "description": "AviationStack ha rifiutato la chiave: incollane una valida (piano gratuito: 100 chiamate al mese).",
+        "data": {
+          "aviationstack_key": "Chiave di AviationStack"
+        }
+      }
+    },
+    "error": {
+      "invalid_name": "Il nome deve avere solo lettere minuscole, senza spazi (per esempio alice).",
+      "name_taken": "C'è già una persona con questo nome.",
+      "user_taken": "Questo utente di Home Assistant è già collegato a un'altra persona.",
+      "invalid_notify": "Il servizio di notifica deve essere un notify.mobile_app_… (l'app Home Assistant sul telefono).",
+      "invalid_person": "Scegli un'entità person.",
+      "invalid_url": "Indirizzo non valido: scrivi http://host:porta, senza percorso.",
+      "decoder_unreachable": "Il decodificatore non risponde a {url}: controlla l'app Barcode Decoder o lascia vuoto il campo.",
+      "decoder_wrong_api": "A {url} risponde qualcosa che non è il decodificatore (api 1).",
+      "invalid_key": "Incolla la chiave di AviationStack."
+    },
+    "abort": {
+      "entity_ids_taken": "Questi id sono già usati da un'altra integrazione: {ids}. Se sono i sensori MQTT del vecchio servizio, fermalo e cancella i suoi topic (guida, passo 2.5), poi riprova.",
+      "newer_database": "Questi dati sono di una versione più recente di Boarding Pass Tracker: aggiorna l'integrazione.",
+      "foreign_database": "Il file tracker.db non è di Boarding Pass Tracker: spostalo e riprova.",
+      "old_database_v0": "Questi dati sono della vecchia App Casa (schema v0): convertili prima con il servizio boarding-pass-tracker 0.1.0.",
+      "broken_database": "Il file tracker.db è danneggiato: rifai l'esportazione.",
+      "file_mismatch": "{n} file mancano o non corrispondono: rifai l'esportazione."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni",
+        "description": "Il decodificatore serve per leggere foto (anche HEIC) e PDF: senza, funzionano i pass del Wallet e i voli aggiunti a mano.",
+        "data": {
+          "decoder_url": "Indirizzo del decodificatore",
+          "monthly_cap": "Chiamate ad AviationStack al mese",
+          "fr24_add": "Flightradar24: aggiungi volo",
+          "fr24_remove": "Flightradar24: togli volo",
+          "fr24_tracked": "Flightradar24: voli seguiti",
+          "flights_enabled": "Segui i voli (AviationStack, gate, Flightradar24)",
+          "notify_enabled": "Manda le notifiche"
+        },
+        "data_description": {
+          "decoder_url": "L'app Barcode Decoder o il suo container, per esempio http://host:8099. Vuoto: nessun decodificatore.",
+          "monthly_cap": "Il piano gratuito ne ha 100: 0 vuol dire nessuna chiamata.",
+          "flights_enabled": "Spento: nessuna chiamata ad AviationStack, OpenStreetMap o Flightradar24.",
+          "notify_enabled": "Spento: le notifiche aspettano e partono quando lo riaccendi."
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Indirizzo non valido: scrivi http://host:porta, senza percorso.",
+      "decoder_unreachable": "Il decodificatore non risponde a {url}: controlla l'app Barcode Decoder o lascia vuoto il campo.",
+      "decoder_wrong_api": "A {url} risponde qualcosa che non è il decodificatore (api 1)."
+    }
+  },
+  "config_subentries": {
+    "person": {
+      "entry_type": "Persona",
+      "initiate_flow": {
+        "user": "Aggiungi persona"
+      },
+      "step": {
+        "user": {
+          "title": "Aggiungi persona",
+          "description": "Il nome con cui la persona compare nei dati (solo lettere minuscole), il suo utente di Home Assistant (per le Scorciatoie), il telefono per le notifiche e la persona per il promemoria del gate.",
+          "data": {
+            "name": "Nome",
+            "ha_user": "Utente di Home Assistant",
+            "notify": "Telefono per le notifiche",
+            "person": "Persona"
+          },
+          "data_description": {
+            "name": "Solo lettere minuscole, per esempio alice.",
+            "ha_user": "Il token di questo utente identifica la persona nelle Scorciatoie. Senza, la persona non può usarle.",
+            "notify": "Il servizio notify.mobile_app_… dell'app Home Assistant sul suo telefono.",
+            "person": "La sua posizione serve per il promemoria «Vai al gate»."
+          }
+        },
+        "reconfigure": {
+          "title": "Persona «{name}»",
+          "description": "Cambia l'utente di Home Assistant, il telefono per le notifiche o la persona. Il nome si può cambiare solo finché non compare nei dati dei voli.",
+          "data": {
+            "name": "Nome",
+            "ha_user": "Utente di Home Assistant",
+            "notify": "Telefono per le notifiche",
+            "person": "Persona"
+          },
+          "data_description": {
+            "name": "Solo lettere minuscole, per esempio alice.",
+            "ha_user": "Il token di questo utente identifica la persona nelle Scorciatoie. Senza, la persona non può usarle.",
+            "notify": "Il servizio notify.mobile_app_… dell'app Home Assistant sul suo telefono.",
+            "person": "La sua posizione serve per il promemoria «Vai al gate»."
+          }
+        }
+      },
+      "error": {
+        "invalid_name": "Il nome deve avere solo lettere minuscole, senza spazi (per esempio alice).",
+        "name_taken": "C'è già una persona con questo nome.",
+        "user_taken": "Questo utente di Home Assistant è già collegato a un'altra persona.",
+        "invalid_notify": "Il servizio di notifica deve essere un notify.mobile_app_… (l'app Home Assistant sul telefono).",
+        "invalid_person": "Scegli un'entità person.",
+        "name_in_use": "Questo nome è già nei dati dei voli: non si può cambiare. Aggiungi un'altra persona se serve."
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_flight": {
+        "name": "Prossimo volo"
+      },
+      "upcoming_flights": {
+        "name": "Voli"
+      },
+      "flight_statistics": {
+        "name": "Statistiche voli"
+      }
+    }
+  },
+  "issues": {
+    "entity_id_taken": {
+      "title": "Sensore con id diverso",
+      "description": "Il sensore {actual} doveva chiamarsi {wanted}, che è già usato da un'altra entità: le card e le dashboard usano {wanted}. Elimina o rinomina l'altra entità, poi rinomina questo sensore in {wanted}."
+    },
+    "decoder_unreachable": {
+      "title": "Decodificatore non raggiungibile",
+      "description": "Il decodificatore ({url}) non risponde da {minutes} minuti e {n} foto aspettano: controlla l'app Barcode Decoder."
+    },
+    "notify_service_missing": {
+      "title": "Notifiche per {name} ferme",
+      "description": "Le notifiche per {name} non partono: il servizio notify.{service} non esiste più (telefono rinominato o tolto). Aggiorna la persona in Boarding Pass Tracker."
+    }
+  },
+  "exceptions": {
+    "newer_database": {
+      "message": "Questi dati sono di una versione più recente di Boarding Pass Tracker: aggiorna l'integrazione."
+    },
+    "foreign_database": {
+      "message": "Il file tracker.db non è di Boarding Pass Tracker: spostalo e riprova."
+    },
+    "old_database_v0": {
+      "message": "Questi dati sono della vecchia App Casa (schema v0): convertili prima con il servizio boarding-pass-tracker 0.1.0."
+    },
+    "migration_failed": {
+      "message": "L'aggiornamento dei dati alla versione 2 non è riuscito e i dati sono rimasti come prima: c'è una copia in backups/. Apri una segnalazione con i log."
+    }
+  }
+}

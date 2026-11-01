@@ -1,0 +1,15 @@
+{
+  "domain": "boarding_pass_tracker",
+  "name": "Boarding Pass Tracker",
+  "after_dependencies": ["hassio", "mobile_app", "person"],
+  "codeowners": ["@7hemas7er"],
+  "config_flow": true,
+  "dependencies": ["frontend", "http"],
+  "documentation": "https://github.com/7hemas7er/boarding-pass-tracker",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/7hemas7er/boarding-pass-tracker/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "1.0.0"
+}

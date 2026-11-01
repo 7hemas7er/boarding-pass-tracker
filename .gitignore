@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+config.json
+secrets.env
+*.env
+.env.*
+!.env.example
+
+# Data: databases and uploaded documents (boarding passes)
+*.db
+*.db-wal
+*.db-shm
+*.db.bak*
+*.sqlite
+*.sqlite3
+*.pkpass
+data/
+file/
+
+# Editors, assistants and OS
+.claude/
+.vscode/
+.idea/
+*.swp
+.DS_Store

@@ -1,0 +1,38 @@
+# The tests of docs/ARCHITECTURE.md: the core (unittest, no Home Assistant) on the oldest and the newest Python
+# supported, and the integration (pytest-homeassistant-custom-component, Python 3.14).
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends tzdata
+      - run: python -m pip install --disable-pip-version-check -r tests/core/requirements.txt
+      - name: core (TZ=Europe/Rome, then three zones and four fake instants)
+        run: python -I -B tests/core/run.py --final
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0  # v7.1.0
+        with:
+          python-version: "3.14"
+      - run: python -m pip install --disable-pip-version-check -r tests/integration/requirements.txt
+      - run: TZ=Europe/Rome python -B -m pytest tests/integration -p no:cacheprovider --timeout 90

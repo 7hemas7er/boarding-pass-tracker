@@ -1,0 +1,113 @@
+{
+ "views": [
+  {
+   "title": "Voli",
+   "path": "flights",
+   "type": "sections",
+   "max_columns": 2,
+   "sections": [
+    {
+     "type": "grid",
+     "cards": [
+      {
+       "type": "heading",
+       "heading": "Prossimo volo",
+       "icon": "mdi:airplane-clock"
+      },
+      {
+       "type": "custom:boarding-pass-tracker-flight-card",
+       "entity": "sensor.boarding_pass_tracker_next_flight",
+       "grid_options": {
+        "columns": "full",
+        "rows": "auto"
+       }
+      },
+      {
+       "type": "map",
+       "entities": [
+        {
+         "entity": "device_tracker.flightradar24"
+        }
+       ],
+       "hours_to_show": 4,
+       "default_zoom": 6,
+       "theme_mode": "auto",
+       "grid_options": {
+        "columns": "full",
+        "rows": 5
+       },
+       "visibility": [
+        {
+         "condition": "state",
+         "entity": "device_tracker.flightradar24",
+         "state_not": [
+          "unknown",
+          "unavailable"
+         ]
+        }
+       ]
+      },
+      {
+       "type": "markdown",
+       "entity_id": [
+        "sensor.boarding_pass_tracker_next_flight"
+       ],
+       "content": "{% set a = states.sensor.boarding_pass_tracker_next_flight.attributes if states.sensor.boarding_pass_tracker_next_flight else {} %}\n{% set on_ground = a.get('phase') in [none, 'scheduled'] %}\n{% set sources = {'aviationstack': 'AviationStack', 'boarding_pass': \"carta d'imbarco\", 'manual': 'inserimento a mano'} %}\n{% if a.get('flight') %}\n#### Dettagli\n\n| | |\n|---|---|\n| Partenza | {{ a.departure_time or '–' }}{% if a.departure_scheduled_time and a.departure_scheduled_time != a.departure_time %} (prevista {{ a.departure_scheduled_time }}){% endif %} |\n| Imbarco | {{ a.boarding_time or '–' }}{{ ' circa' if a.boarding_time and a.boarding_estimated }} |\n{% if a.at_gate_time and on_ground %}| Al gate | per le **{{ a.at_gate_time }}**, {{ \"quando inizia l'imbarco\" if a.priority else \"10 minuti prima dell'imbarco\" }} · avviati alle {{ a.leave_for_gate_time }} |\n{% endif %}| Gate | {{ a.gate or 'non ancora assegnato' }}{% if a.terminal %} · terminal {{ a.terminal }}{% endif %} |\n| Arrivo | {{ a.arrival_time or '–' }}{% if a.arrival_gate %} · gate {{ a.arrival_gate }}{% endif %} |\n{% if a.baggage_belt %}| Bagagli | nastro {{ a.baggage_belt }} |\n{% endif %}| Passeggeri | {{ a.passengers | join(', ') }} |\n\n<small>Orari locali degli aeroporti. Fonte: {{ sources.get(a.source, a.source) }}{% if a.updated_at %}, aggiornato alle {{ as_datetime(a.updated_at).strftime('%H:%M del %d/%m') }}{% endif %}.</small>\n{% else %}\nNessun volo in programma.\n\nPer aggiungerne uno: nel Wallet apri la carta d'imbarco, **···** → **Condividi**, poi **Manda volo**.\n{% endif %}",
+       "grid_options": {
+        "columns": "full",
+        "rows": "auto"
+       }
+      }
+     ]
+    },
+    {
+     "type": "grid",
+     "visibility": [
+      {
+       "condition": "numeric_state",
+       "entity": "sensor.boarding_pass_tracker_upcoming_flights",
+       "above": 1
+      }
+     ],
+     "cards": [
+      {
+       "type": "heading",
+       "heading": "Tutti i voli",
+       "icon": "mdi:airplane"
+      },
+      {
+       "type": "markdown",
+       "entity_id": [
+        "sensor.boarding_pass_tracker_upcoming_flights"
+       ],
+       "content": "| Volo | Tratta | Giorno | Partenza | Stato | Gate |\n|---|---|---|---|---|---|\n{% for v in state_attr('sensor.boarding_pass_tracker_upcoming_flights', 'list') or [] %}| {{ v.flight }} | {{ v.route }} | {{ as_datetime(v.date).strftime('%d/%m') }} | {{ v.departure_time or '–' }} | {{ v.status }} | {{ v.gate or '–' }} |\n{% endfor %}"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "sections",
+   "path": "statistics",
+   "title": "Statistiche",
+   "icon": "mdi:chart-box-outline",
+   "max_columns": 2,
+   "sections": [
+    {
+     "type": "grid",
+     "column_span": 2,
+     "cards": [
+      {
+       "type": "custom:boarding-pass-tracker-stats-card",
+       "entity": "sensor.boarding_pass_tracker_flight_statistics",
+       "grid_options": {
+        "columns": "full",
+        "rows": "auto"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

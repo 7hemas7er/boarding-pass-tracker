@@ -1,0 +1,4 @@
+# T1: the core's tests (plain unittest, no Home Assistant; Python >= 3.12). The core itself needs nothing outside the
+# standard library; the tests draw boarding-pass images with Pillow. System: the time zone database (tzdata).
+#   python3 -m pip install -r tests/core/requirements.txt && python3 -I -B tests/core/run.py
+Pillow==12.1.1

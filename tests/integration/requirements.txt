@@ -1,0 +1,8 @@
+# T2: the integration's tests (pytest, Python >= 3.14). INTEGRATION_PLAN.md 7.1.
+#   uv venv --python 3.14 <venv> && uv pip install --python <venv>/bin/python -r tests/integration/requirements.txt
+#   cd <repo> && <venv>/bin/python -m pytest tests/integration
+# pytest-homeassistant-custom-component 0.13.375 pins homeassistant 2026.10.4 (and pytest, pytest-asyncio, freezegun,
+# pytest-socket...). The frontend wheel is not one of its requirements, but without it the frontend component (a
+# dependency of this integration) does not set up: «No module named 'hass_frontend'».
+pytest-homeassistant-custom-component==0.13.375
+home-assistant-frontend==20260930.5

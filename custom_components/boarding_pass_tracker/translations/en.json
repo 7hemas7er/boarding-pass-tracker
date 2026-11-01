@@ -1,0 +1,239 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Boarding Pass Tracker",
+        "description": "Boarding Pass Tracker reads boarding passes, follows the flights and tells you what changes. Photos, boarding passes and names stay in Home Assistant. Only these leave it: the flight code, to AviationStack and to Flightradar24 (through its integration), the gate position looked up on OpenStreetMap, and the text of the notifications, which goes through the push service of the Home Assistant app (Apple/Google). Photos go only to the decoder you name."
+      },
+      "adopt": {
+        "title": "Data found",
+        "description": "I found the data of an earlier installation: {flights} flights, {documents} documents, {files} files, {passes} boarding passes (schema v{schema}); {queued} queued, {unnotified} not notified yet. Use them? The data stays where it is; if it needs an upgrade, I first make a copy in backups/."
+      },
+      "person_found": {
+        "title": "Person «{name}»",
+        "description": "Person «{name}» found in the data: choose their Home Assistant user (for the Shortcuts), the phone for the notifications and the person for the gate reminder.",
+        "data": {
+          "ha_user": "Home Assistant user",
+          "notify": "Phone for the notifications",
+          "person": "Person",
+          "skip": "No notifications for this name"
+        },
+        "data_description": {
+          "ha_user": "This user's token identifies the person in the Shortcuts. Without it, the person cannot use them.",
+          "notify": "The notify.mobile_app_… service of the Home Assistant app on their phone.",
+          "person": "Their location is used for the «Go to the gate» reminder.",
+          "skip": "No person for this name: their flights and documents stay, but nobody is notified."
+        }
+      },
+      "person_config": {
+        "title": "Person «{name}»",
+        "description": "Person «{name}» from the old service's configuration, with no data yet: they get the flight change alerts. Choose their Home Assistant user (for the Shortcuts), the phone for the notifications and the person for the gate reminder.",
+        "data": {
+          "name": "Name",
+          "ha_user": "Home Assistant user",
+          "notify": "Phone for the notifications",
+          "person": "Person"
+        },
+        "data_description": {
+          "name": "The name stored in the data: lowercase letters only.",
+          "ha_user": "This user's token identifies the person in the Shortcuts. Without it, the person cannot use them.",
+          "notify": "The notify.mobile_app_… service of the Home Assistant app on their phone.",
+          "person": "Their location is used for the «Go to the gate» reminder."
+        }
+      },
+      "people": {
+        "title": "People",
+        "description": "Choose the Home Assistant users to add as people (or none): for each you will choose the name, the phone for the notifications and the person. More people can be added later with «Add person».",
+        "data": {
+          "users": "Home Assistant users"
+        }
+      },
+      "person": {
+        "title": "Person for {user}",
+        "description": "Home Assistant user «{user}»: choose the name stored in the data, the phone for the notifications and the person for the gate reminder.",
+        "data": {
+          "name": "Name",
+          "notify": "Phone for the notifications",
+          "person": "Person"
+        },
+        "data_description": {
+          "name": "The name stored in the data: lowercase letters only.",
+          "notify": "The notify.mobile_app_… service of the Home Assistant app on their phone.",
+          "person": "Their location is used for the «Go to the gate» reminder."
+        }
+      },
+      "services": {
+        "title": "Services",
+        "description": "All optional. The decoder reads photos (HEIC too) and PDFs: without it, Wallet passes and flights added by hand still work. The AviationStack key is not tested, because a test would use one of the month's calls.",
+        "data": {
+          "aviationstack_key": "AviationStack key",
+          "monthly_cap": "AviationStack calls per month",
+          "decoder_url": "Decoder address",
+          "fr24_add": "Flightradar24: add flight",
+          "fr24_remove": "Flightradar24: remove flight",
+          "fr24_tracked": "Flightradar24: tracked flights"
+        },
+        "data_description": {
+          "aviationstack_key": "For the times, delays and gates of the flights. Without a key the flights stay as the boarding passes give them.",
+          "monthly_cap": "The free plan has 100: 0 means no calls.",
+          "decoder_url": "The Barcode Decoder app or its container, for example http://host:8099. Empty: no decoder.",
+          "fr24_add": "The text entity of the Flightradar24 integration that adds a flight to track.",
+          "fr24_remove": "The text entity of the Flightradar24 integration that removes a tracked flight.",
+          "fr24_tracked": "The sensor of the Flightradar24 integration with the tracked flights."
+        }
+      },
+      "reconfigure": {
+        "title": "AviationStack key",
+        "description": "Paste the new AviationStack key, or leave it empty not to use AviationStack.",
+        "data": {
+          "aviationstack_key": "AviationStack key"
+        }
+      },
+      "reauth_confirm": {
+        "title": "AviationStack key refused",
+        "description": "AviationStack refused the key: paste a valid one (free plan: 100 calls per month).",
+        "data": {
+          "aviationstack_key": "AviationStack key"
+        }
+      }
+    },
+    "error": {
+      "invalid_name": "The name must have lowercase letters only, no spaces (for example alice).",
+      "name_taken": "There is already a person with this name.",
+      "user_taken": "This Home Assistant user is already linked to another person.",
+      "invalid_notify": "The notify service must be a notify.mobile_app_… one (the Home Assistant app on the phone).",
+      "invalid_person": "Choose a person entity.",
+      "invalid_url": "Invalid address: write http://host:port, without a path.",
+      "decoder_unreachable": "The decoder does not answer at {url}: check the Barcode Decoder app or leave the field empty.",
+      "decoder_wrong_api": "What answers at {url} is not the decoder (api 1).",
+      "invalid_key": "Paste the AviationStack key."
+    },
+    "abort": {
+      "entity_ids_taken": "These ids are already used by another integration: {ids}. If they are the MQTT sensors of the old service, stop it and clear its topics (guide, step 2.5), then try again.",
+      "newer_database": "This data comes from a newer version of Boarding Pass Tracker: update the integration.",
+      "foreign_database": "The tracker.db file does not belong to Boarding Pass Tracker: move it away and try again.",
+      "old_database_v0": "This data comes from the old App Casa (schema v0): convert it first with the boarding-pass-tracker 0.1.0 service.",
+      "broken_database": "The tracker.db file is damaged: export it again.",
+      "file_mismatch": "{n} files are missing or do not match: export the data again."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "description": "The decoder reads photos (HEIC too) and PDFs: without it, Wallet passes and flights added by hand still work.",
+        "data": {
+          "decoder_url": "Decoder address",
+          "monthly_cap": "AviationStack calls per month",
+          "fr24_add": "Flightradar24: add flight",
+          "fr24_remove": "Flightradar24: remove flight",
+          "fr24_tracked": "Flightradar24: tracked flights",
+          "flights_enabled": "Follow the flights (AviationStack, gate, Flightradar24)",
+          "notify_enabled": "Send notifications"
+        },
+        "data_description": {
+          "decoder_url": "The Barcode Decoder app or its container, for example http://host:8099. Empty: no decoder.",
+          "monthly_cap": "The free plan has 100: 0 means no calls.",
+          "flights_enabled": "Off: no calls to AviationStack, OpenStreetMap or Flightradar24.",
+          "notify_enabled": "Off: the notifications wait and go out when you turn it on again."
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Invalid address: write http://host:port, without a path.",
+      "decoder_unreachable": "The decoder does not answer at {url}: check the Barcode Decoder app or leave the field empty.",
+      "decoder_wrong_api": "What answers at {url} is not the decoder (api 1)."
+    }
+  },
+  "config_subentries": {
+    "person": {
+      "entry_type": "Person",
+      "initiate_flow": {
+        "user": "Add person"
+      },
+      "step": {
+        "user": {
+          "title": "Add person",
+          "description": "The name the person has in the data (lowercase letters only), their Home Assistant user (for the Shortcuts), the phone for the notifications and the person for the gate reminder.",
+          "data": {
+            "name": "Name",
+            "ha_user": "Home Assistant user",
+            "notify": "Phone for the notifications",
+            "person": "Person"
+          },
+          "data_description": {
+            "name": "Lowercase letters only, for example alice.",
+            "ha_user": "This user's token identifies the person in the Shortcuts. Without it, the person cannot use them.",
+            "notify": "The notify.mobile_app_… service of the Home Assistant app on their phone.",
+            "person": "Their location is used for the «Go to the gate» reminder."
+          }
+        },
+        "reconfigure": {
+          "title": "Person «{name}»",
+          "description": "Change the Home Assistant user, the phone for the notifications or the person. The name can be changed only while it is not in the flight data.",
+          "data": {
+            "name": "Name",
+            "ha_user": "Home Assistant user",
+            "notify": "Phone for the notifications",
+            "person": "Person"
+          },
+          "data_description": {
+            "name": "Lowercase letters only, for example alice.",
+            "ha_user": "This user's token identifies the person in the Shortcuts. Without it, the person cannot use them.",
+            "notify": "The notify.mobile_app_… service of the Home Assistant app on their phone.",
+            "person": "Their location is used for the «Go to the gate» reminder."
+          }
+        }
+      },
+      "error": {
+        "invalid_name": "The name must have lowercase letters only, no spaces (for example alice).",
+        "name_taken": "There is already a person with this name.",
+        "user_taken": "This Home Assistant user is already linked to another person.",
+        "invalid_notify": "The notify service must be a notify.mobile_app_… one (the Home Assistant app on the phone).",
+        "invalid_person": "Choose a person entity.",
+        "name_in_use": "This name is already in the flight data: it cannot be changed. Add another person if needed."
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_flight": {
+        "name": "Next flight"
+      },
+      "upcoming_flights": {
+        "name": "Flights"
+      },
+      "flight_statistics": {
+        "name": "Flight statistics"
+      }
+    }
+  },
+  "issues": {
+    "entity_id_taken": {
+      "title": "Sensor has a different id",
+      "description": "The sensor {actual} should have been {wanted}, which another entity already uses: the cards and the dashboards use {wanted}. Delete or rename the other entity, then rename this sensor to {wanted}."
+    },
+    "decoder_unreachable": {
+      "title": "Decoder unreachable",
+      "description": "The decoder ({url}) has not answered for {minutes} minutes and {n} photos are waiting: check the Barcode Decoder app."
+    },
+    "notify_service_missing": {
+      "title": "Notifications for {name} stopped",
+      "description": "The notifications for {name} do not go out: the notify.{service} service no longer exists (phone renamed or removed). Update the person in Boarding Pass Tracker."
+    }
+  },
+  "exceptions": {
+    "newer_database": {
+      "message": "This data comes from a newer version of Boarding Pass Tracker: update the integration."
+    },
+    "foreign_database": {
+      "message": "The tracker.db file does not belong to Boarding Pass Tracker: move it away and try again."
+    },
+    "old_database_v0": {
+      "message": "This data comes from the old App Casa (schema v0): convert it first with the boarding-pass-tracker 0.1.0 service."
+    },
+    "migration_failed": {
+      "message": "Upgrading the data to version 2 failed and the data is as it was: there is a copy in backups/. Open an issue with the logs."
+    }
+  }
+}
